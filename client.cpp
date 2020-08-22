@@ -45,7 +45,8 @@ std::string generate_reply(std::string message, bool subsystems_enabled) {
 
 int main ()
 {
-    //  Prepare our context and socket
+    std::cout << "CLIENT" << std::endl;
+
     zmq::context_t context (1);
 
     zmq::socket_t main_socket (context, ZMQ_REP);
@@ -54,13 +55,16 @@ int main ()
     zmq::socket_t instructions_socket (context, ZMQ_REP);
     instructions_socket.bind ("tcp://*:12278");
 
-    std::cout << "CLIENT" << std::endl;
     bool subsystems_enabled = true;
     while (true) {
         zmq::message_t instructions_request;
         auto instructions_result = instructions_socket.recv (instructions_request, zmq::recv_flags::dontwait);
         if (instructions_result) {
-            subsystems_enabled = false;
+            if (instructions_request.to_string() == "stop") {
+                std::cout << "Stop Instruction Received"<< std::endl;
+                subsystems_enabled = false;
+            }
+            instructions_socket.send (zmq::message_t(), zmq::send_flags::none);
         }
 
         zmq::message_t main_request;

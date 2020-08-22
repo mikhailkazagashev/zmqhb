@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <time.h>
+#include <thread>
 
 uint64_t get_timestamp()
 {
@@ -15,16 +16,12 @@ uint64_t get_timestamp()
     return timestamp;
 }
 
-int main ()
+void heartbeat(zmq::context_t *context)
 {
     #define HEARTBEAT_INTERVAL  1000000
 
-    //  Prepare our context and socket
-    zmq::context_t context (1);
-    zmq::socket_t socket (context, ZMQ_REQ);
+    zmq::socket_t socket (*context, ZMQ_REQ);
     socket.connect ("tcp://localhost:12277");
-
-    std::cout << "SERVER" << std::endl;
 
     //  Send out heartbeats at regular intervals
     uint64_t heartbeat_at = get_timestamp() + HEARTBEAT_INTERVAL;
@@ -44,5 +41,27 @@ int main ()
             std::cout << "Received:" << std::endl << reply.to_string() << std::endl;
         }
     }
+}
+
+int main ()
+{
+    std::cout << "SERVER" << std::endl;
+    std::cout << "Press Enter to send stop instruction" << std::endl;
+
+    zmq::context_t context (1);
+
+    zmq::socket_t instructions_socket (context, ZMQ_REQ);
+    instructions_socket.connect ("tcp://localhost:12278");
+
+    // run heartbeat thread
+    std::thread heartbeatThread (heartbeat, &context);
+
+    // wait for Enter
+    std::cin.get();
+
+    // send stop
+    instructions_socket.send (zmq::str_buffer("stop"), zmq::send_flags::none);
+
+    heartbeatThread.join();
     return 0;
 }
