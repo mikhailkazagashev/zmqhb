@@ -42,7 +42,6 @@ void heartbeat(zmq::context_t *context, EC_KEY *ec_private_key)
 
             //  Send signature
             socket.send ( zmq::buffer(sig_p, sig_size), zmq::send_flags::none);
-            std::cout << "Send signature" << std::endl;
 
             //  Get the reply
             zmq::message_t reply;
@@ -54,6 +53,7 @@ void heartbeat(zmq::context_t *context, EC_KEY *ec_private_key)
 
 int main ()
 {
+    // Read key
     FILE *f = fopen("private.ec.key", "r");
     if(!f) {
         std::perror("private.ec.key file opening failed");
