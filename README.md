@@ -1,6 +1,6 @@
 Description
 ============
-Two application with command line interface 
+Two applications with command line interface 
 talk to each other using signed zmq messages.
 
 Requirements
@@ -34,7 +34,7 @@ Run server in the other terminal:
 ```
 ./server.out
 ```
-You should see client-server communication log in the commandline.
+You should see client-server communication log in the terminal.
 Press Enter in server command line to send stop instruction to client. 
 
 Run in docker containers
@@ -51,7 +51,7 @@ Run server in the other terminal:
 ```
 sudo docker-compose up server
 ```
-You should see client-server communication log in the commandline.
+You should see client-server communication log in the terminal.
 Press Enter in server command line to send stop instruction to client.
 
 Generating Keys
