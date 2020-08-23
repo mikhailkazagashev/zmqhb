@@ -2,6 +2,35 @@ Description
 ============
 Two applications with command line interface 
 talk to each other using signed zmq messages.
+```
+~/zmqhb$ ./server.out
+SERVER
+Press Enter to send stop instruction
+
+Send:
+areYouAlive+1598196459
+Received:
+{"timestamp":"AliveAt1598196459","statuses":{"subsystem1":"ERROR","subsystem2":"OK"}}
+
+Send:
+areYouAlive+1598196460
+Received:
+{"timestamp":"AliveAt1598196460","statuses":{"subsystem1":"OFF","subsystem2":"WARNING"}}
+```
+
+```
+~/zmqhb$ ./client.out
+CLIENT
+Received:
+areYouAlive+1598196459
+Send:
+{"timestamp":"AliveAt1598196459","statuses":{"subsystem1":"ERROR","subsystem2":"OK"}}
+
+Received:
+areYouAlive+1598196460
+Send:
+{"timestamp":"AliveAt1598196460","statuses":{"subsystem1":"OFF","subsystem2":"WARNING"}}
+```
 
 Requirements
 ============
