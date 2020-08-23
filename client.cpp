@@ -7,34 +7,7 @@
 #include <openssl/sha.h>
 #include <openssl/bio.h>
 #include <openssl/pem.h>
-
-bool simpleSHA256(std::string input, unsigned char* md)
-{
-    SHA256_CTX context;
-    if(!SHA256_Init(&context))
-        return false;
-
-    if(!SHA256_Update(&context, input.c_str(), input.length()))
-        return false;
-
-    if(!SHA256_Final(md, &context))
-        return false;
-
-    return true;
-}
-
-bool check_signature(std::string input, EC_KEY* ec_pub_key, void *sig, long size) {
-    unsigned char hash[SHA256_DIGEST_LENGTH]; // 32 bytes
-    if(!simpleSHA256(input, hash))
-    {
-        std::cout << "Creating hash failed"<< std::endl;
-        std::terminate();
-    }
-    const unsigned char *sig_p = NULL;
-    sig_p = static_cast<const unsigned char*>(sig);
-    auto *signature = d2i_ECDSA_SIG(NULL, &sig_p, size);
-    return ECDSA_do_verify(hash, SHA256_DIGEST_LENGTH, signature, ec_pub_key) == 1;
-}
+#include "signs.h"
 
 enum Status { OK, OFF, WARNING, ERROR, CRITICAL};
 const boost::unordered_map<Status,const char*> StatusToString = boost::assign::map_list_of
@@ -71,9 +44,14 @@ std::string generate_reply(std::string message, bool subsystems_enabled) {
 
 int main ()
 {
-    FILE * f1 = fopen("public.pem", "r");
-    EC_KEY *ec_pub_key = PEM_read_EC_PUBKEY(f1, NULL, NULL, NULL);
-    fclose(f1);
+    FILE * f = fopen("public.pem", "r");
+    if(!f) {
+        std::perror("public.pem file opening failed");
+        return 0;
+    }
+
+    EC_KEY *ec_pub_key = PEM_read_EC_PUBKEY(f, nullptr, nullptr, nullptr);
+    fclose(f);
 
     std::cout << "CLIENT" << std::endl;
 

@@ -28,3 +28,10 @@ Run server:
 ```
 You should see client-server communication log in the commandline.
 Press Enter in server command line to send stop instruction to client. 
+
+Generating Keys
+==========
+```
+openssl ecparam -name prime256v1 -genkey -noout -out private.ec.key
+openssl ec -in private.ec.key -pubout -out public.pem
+```
