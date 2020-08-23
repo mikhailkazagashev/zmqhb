@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  server:
+    build: .
+    command: ./server.out
+    network_mode: "host"
+  client:
+    build: .
+    command: ./client.out
+    network_mode: "host"
