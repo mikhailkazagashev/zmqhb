@@ -41,7 +41,7 @@ Run in docker containers
 ==========
 Build image:
 ```
-docker build .
+sudo docker build .
 ```
 Run client terminal:
 ```
