@@ -6,11 +6,13 @@ talk to each other using signed zmq messages.
 Requirements
 ============
 ```
+#install ccpzmq
 echo 'deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/network:messaging:zeromq:release-stable.list
 curl -fsSL https://download.opensuse.org/repositories/network:messaging:zeromq:release-stable/xUbuntu_18.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/network:messaging:zeromq:release-stable.gpg > /dev/null
 sudo apt update
 sudo apt install libzmq3-dev=4.3.2
 
+#install the rest
 sudo apt install g++
 sudo apt-get install libboost-all-dev
 sudo apt-get install cmake
