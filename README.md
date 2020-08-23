@@ -39,6 +39,8 @@ Run server in the other terminal:
 You should see client-server communication log in the terminal.
 Press Enter in server command line to send stop instruction to client. 
 
+The aplications read corresponsing keys from the source directory.
+
 Run in docker containers
 ==========
 Build image:
